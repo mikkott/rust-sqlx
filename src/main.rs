@@ -40,7 +40,7 @@ async fn add_user(pool: &SqlitePool, user: User) -> anyhow::Result<i64> {
 async fn list_users<T>(pool: &SqlitePool) -> anyhow::Result<Vec<User>>{
 
     let users = sqlx::query_as::<_, User>(
-    r#"SELECT * FROM users"#
+        r#"SELECT * FROM users"#
     ).fetch_all(pool).await?;
     
     Ok(users)

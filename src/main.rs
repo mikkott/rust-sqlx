@@ -25,8 +25,8 @@ async fn add_user(pool: &SqlitePool, user: User) -> anyhow::Result<i64> {
     let mut conn = pool.acquire().await?;
     let id = sqlx::query!(
         r#"
-INSERT INTO users ( email, username )
-VALUES ( ?1, ?2 )
+            INSERT INTO users ( email, username )
+            VALUES ( ?1, ?2 )
         "#,
         user.email, user.username
     )
@@ -39,7 +39,9 @@ VALUES ( ?1, ?2 )
 
 async fn list_users<T>(pool: &SqlitePool) -> anyhow::Result<Vec<User>>{
 
-    let users = sqlx::query_as::<_, User>("SELECT * FROM users").fetch_all(pool).await?;
+    let users = sqlx::query_as::<_, User>(
+    r#"SELECT * FROM users"#
+    ).fetch_all(pool).await?;
     
     Ok(users)
 }

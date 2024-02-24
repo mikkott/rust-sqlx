@@ -26,5 +26,5 @@ CREATE TABLE IF NOT EXISTS users (
 EOT
 ```
 
-### un migrations to create table(s) in database
+### Run migrations to create table(s) in database
 `$ sqlx migrate run`

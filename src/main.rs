@@ -15,9 +15,7 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn add_user(pool: &SqlitePool, user: self::models::models::User) -> anyhow::Result<i64> {
-
     let mut conn = pool.acquire().await?;
-
     let id = sqlx::query!(
         r#"
 INSERT INTO users ( email, username )

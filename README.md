@@ -3,7 +3,7 @@
 ## sqlx-cli
 
 ### Install sqlx cli client
-`$ cargo install sqlx-cli`
+`$ cargo install sqlx-cli --no-default-features --features rustls, sqlite`
 
 ### Create sqlite database
 `$ export DATABASE_URL="sqlite:db.sqlite3"`

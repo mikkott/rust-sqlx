@@ -1,18 +1,16 @@
-use futures::{stream::iter, StreamExt};
+use self::models::models::User;
 use sqlx::sqlite::SqlitePool;
 use std::env;
-use self::models::models::User;
 pub mod models;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
-
     let pool = SqlitePool::connect(&env::var("DATABASE_URL")?).await?;
 
     let foo = add_user(&pool, User::new("foo".to_string(), "foo@bar".to_string())).await?;
     println!("Added user {}", foo);
 
-    let bar= list_users::<User>(&pool).await?;
+    let bar = list_users::<User>(&pool).await?;
 
     for e in bar {
         println!("{:?}", e);
@@ -28,7 +26,8 @@ async fn add_user(pool: &SqlitePool, user: User) -> anyhow::Result<i64> {
             INSERT INTO users ( email, username )
             VALUES ( ?1, ?2 )
         "#,
-        user.email, user.username
+        user.email,
+        user.username
     )
     .execute(&mut *conn)
     .await?
@@ -37,11 +36,10 @@ async fn add_user(pool: &SqlitePool, user: User) -> anyhow::Result<i64> {
     Ok(id)
 }
 
-async fn list_users<T>(pool: &SqlitePool) -> anyhow::Result<Vec<User>>{
+async fn list_users<T>(pool: &SqlitePool) -> anyhow::Result<Vec<User>> {
+    let users = sqlx::query_as::<_, User>(r#"SELECT * FROM users"#)
+        .fetch_all(pool)
+        .await?;
 
-    let users = sqlx::query_as::<_, User>(
-        r#"SELECT * FROM users"#
-    ).fetch_all(pool).await?;
-    
     Ok(users)
 }
